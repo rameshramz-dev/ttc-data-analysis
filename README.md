@@ -1,127 +1,79 @@
-Welcome to the TTC data analysis ReadME!
-
+# Welcome to the TTC Data Analysis README!
 
 # Project Background
 The Toronto Transit Commission (TTC) operates one of the most heavily used public transit networks in North America, delivering hundreds of millions of passenger trips annually across its subway, streetcar, and bus systems. Maintaining schedule reliability, operational efficiency, and rider satisfaction requires continuous monitoring of service disruptions, mechanical incidents, and peak-hour network bottlenecks.
 
-This project analyzes historical TTC subway operational and delay data to identify core service patterns, evaluate transit reliability across routes and transit modes, and diagnose key drivers of delays. Using pandas to perform cleaning and exploratory data analysis. Loading that data into database and providing SQL queries to query data faster and perform joins. Finally, creating the dashboards using Power BI to easily showcase insights derived from analysis.
+This project analyzes historical TTC subway operational and delay data (focusing on 2025 data) to identify core service patterns, evaluate transit reliability across routes, and diagnose key drivers of delays. Using Python (`pandas`) for data cleaning and exploratory data analysis (EDA), data wrangling operations were performed to standardise incident logs and evaluate incident frequencies and severity.
 
-Key Focus Areas & analytical scope:
+**Key Focus Areas & Analytical Scope:**
+- **Delay Frequency & Severity:** Total number of delays by line, station, and temporal periods (months, time-of-day).
+- **Station Hotspots:** Top stations experiencing the highest delay volume and total delay duration.
+- **Temporal Patterns:** Seasonal and month-over-month incident trends and severity distributions.
+- **Data Quality & Wrangling:** Handling missing directional/line metadata and non-delay incident logs.
 
-- **Delay Frequency & Severity:** Total number of delays by lines, stations and time periods(rush hour weekday/weekends/public holidays). 
-- **Station Hotspots:** Top 5 stations with most number of delays.  
-- **Temporal & Seasonal Patterns:** Analyzing day-of-week, time-of-day, and month-over-month incident trends.
-- **Practical Insights for travellers::** Suggesting time users can expect to reach from one end to another.
-
-The SQL queries used to inspect and clean the data for this analysis can be found here [link].
-
-Targeted SQL queries regarding various business questions can be found here [link].
-
-An interactive Power BI dashboard used to report and explore sales trends can be found here [link].
-
-
+---
 
 # Data Structure & Initial Checks
 
-The companies main database structure as seen below consists of four tables: table1, table2, table3, table4, with a total row count of X records. A description of each table is as follows:
-- **Table 2:**
-- **Table 3:**
-- **Table 4:**
-- **Table 5:**
+The raw dataset comprises **40,656 total records** across 11 core attributes, merged with a secondary lookup table containing official TTC delay code descriptions:
 
-[Entity Relationship Diagram here]
+- **Primary Dataset Columns:** `Date`, `Time`, `Day`, `Station`, `Code`, `Min Delay`, `Min Gap`, `Bound`, `Line`, `Vehicle`.
+- **Lookup Dataset (`Code Descriptions.csv`):** Mapped `Code` to `DESCRIPTION` via a left join to provide readable incident descriptions.
+- **Data Cleaning & Engineering:**
+  - Standardized date formatting with `pd.to_datetime()` and derived temporal features (`Year`, `Month`, `Month_Name`, `Hour`).
+  - Evaluated missing values in `Line` and `Bound` columns.
+  - Isolated non-zero delays (`Min Delay != 0`) to separate actual operational disruptions from general reporting logs.
 
-
+---
 
 # Executive Summary
 
 ### Overview of Findings
 
-Explain the overarching findings, trends, and themes in 2-3 sentences here. This section should address the question: "If a stakeholder were to take away 3 main insights from your project, what are the most important things they should know?" You can put yourself in the shoes of a specific stakeholder - for example, a marketing manager or finance director - to think creatively about this section.
+Analysis of the 2025 TTC Subway delay dataset reveals **25,737 total delay incidents**, with an overall average delay duration of **7.78 minutes per incident** (excluding zero-delay events). 
 
-[Visualization, including a graph of overall trends or snapshot of a dashboard]
+1. **Volume vs. Duration Disconnect:** High incident volume does not directly correlate with long delay durations. While summer months (August with 2,719 incidents) experience peak incident counts, winter months (February with 2,274 incidents) suffer from significantly higher operational severity, averaging **9.56 minutes per delay**.
+2. **Station Bottlenecks:** Major transfer hubs—specifically **Bloor Station (915 incidents)** and **Kennedy Station (866 incidents)**—lead in incident frequency, whereas **Eglinton Station** suffers the highest cumulative delay impact with **2,822 total delay minutes** (average 4.28 minutes/incident).
+3. **Outlier Impact:** Severe incident disruptions (>180 minutes delay) distort overall system averages, highlighting vulnerability to catastrophic mechanical or signal failures.
 
-
+---
 
 # Insights Deep Dive
-### Category 1:
 
-* **Main insight 1.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 2.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 3.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 4.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
+### Category 1: Station Hotspots & Disruption Impact
+* **Incident Volume Leaders:** **Bloor Station** (915 incidents, avg 1.85 min) and **Kennedy Station** (866 incidents, avg 2.14 min) record the highest frequency of delay logs, primarily driven by high passenger volumes and transfer bottlenecks.
+* **Duration Severity Leader:** **Eglinton Station** accumulated **2,822 total delay minutes** across 660 incidents, with a substantially higher average delay duration of **4.28 minutes**, indicating slower incident resolution at this location.
+* **Key Hub Hotspots:** Finch (791 count), Kipling (783 count), Wilson (620 count), and Warden (544 count) round out the top station disruption points.
 
-[Visualization specific to category 1]
+### Category 2: Seasonal & Monthly Dynamics
+* **Peak Volume Months:** **August** (2,719 delays), **February** (2,274 delays), and **December** (2,242 delays) logged the highest total delay counts in 2025.
+* **Peak Severity Month:** **February** recorded the highest mean delay severity (**9.56 minutes**), likely influenced by severe winter weather conditions and cold-weather mechanical strain.
+* **Lowest Impact Periods:** September logged both the lowest volume (1,813 delays) and lowest average delay duration (6.83 minutes).
 
+### Category 3: Cause Code Analysis & Zero-Delay Reporting
+* **Code Descriptions:** Merging standardized code lookup descriptions highlighted distinct failure categories ranging from speed control and signal anomalies to passenger/medical emergencies.
+* **Zero-Delay Logging:** A subset of records log `Min Delay = 0`. Evaluating zero-delay instances by `Line` and `Code` reveals operational reporting entries that record minor incidents without impacting schedule timelines.
 
-### Category 2:
+### Category 4: Vehicle & Outlier Performance
+* **Vehicle Reliability:** Aggregating delays by `Vehicle` (filtering for vehicles with >60 incidents) isolates repeating vehicle-level mechanical issues.
+* **Extreme Outliers:** Incidents exceeding **180 minutes (3 hours)** contribute disproportionately to total line downtime and require dedicated emergency response protocols.
 
-* **Main insight 1.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 2.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 3.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 4.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
+---
 
-[Visualization specific to category 2]
+# Recommendations
 
+* **Targeted Station Maintenance at Eglinton:** Investigate root causes for Eglinton Station’s elevated average delay duration (4.28 mins vs ~1.8 mins at Bloor) to streamline incident resolution times.
+* **Winter Weather Preparedness:** Implement pre-winter mechanical checks ahead of February to mitigate the spike in delay severity (9.56 min avg).
+* **High-Volume Hub Crowd Control:** Deploy specialized platform management at Bloor and Kennedy stations during peak hours to reduce passenger-induced delay triggers.
+* **Outlier Incident Protocols:** Develop rapid response mechanisms specifically for high-impact (>180 min) signal and equipment failures.
 
-### Category 3:
+---
 
-* **Main insight 1.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 2.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 3.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 4.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
+# Assumptions and Caveats
 
-[Visualization specific to category 3]
+* **Zero-Delay Exclusions:** Operational average delay calculations excluded `Min Delay == 0` rows to measure active disruption severity accurately.
+* **Missing Line Metadata:** Missing `Line` or `Bound` records were preserved for volume analysis but excluded from line-specific aggregations.
+* **Data Timeframe:** Analysis focuses on 2025 data slice extracted from the TTC Subway Delay dataset.
 
-
-### Category 4:
-
-* **Main insight 1.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 2.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 3.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-  
-* **Main insight 4.** More detail about the supporting analysis about this insight, including time frames, quantitative values, and observations about trends.
-
-[Visualization specific to category 4]
-
-
-
-# Recommendations:
-
-Based on the insights and findings above, we would recommend the [stakeholder team] to consider the following: 
-
-* Specific observation that is related to a recommended action. **Recommendation or general guidance based on this observation.**
-  
-* Specific observation that is related to a recommended action. **Recommendation or general guidance based on this observation.**
-  
-* Specific observation that is related to a recommended action. **Recommendation or general guidance based on this observation.**
-  
-* Specific observation that is related to a recommended action. **Recommendation or general guidance based on this observation.**
-  
-* Specific observation that is related to a recommended action. **Recommendation or general guidance based on this observation.**
-  
-
-
-# Assumptions and Caveats:
-
-Throughout the analysis, multiple assumptions were made to manage challenges with the data. These assumptions and caveats are noted below:
-
-* Assumption 1 (ex: missing country records were for customers based in the US, and were re-coded to be US citizens)
-  
-* Assumption 1 (ex: data for December 2021 was missing - this was imputed using a combination of historical trends and December 2020 data)
-  
-* Assumption 1 (ex: because 3% of the refund date column contained non-sensical dates, these were excluded from the analysis)
-
-
-Data Source: https://open.toronto.ca/dataset/ttc-subway-delay-data/
+---
+**Data Source:** [TTC Subway Delay Data - Open Data Toronto](https://open.toronto.ca/dataset/ttc-subway-delay-data/)
