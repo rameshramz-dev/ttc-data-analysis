@@ -3,26 +3,25 @@
 # Project Background
 The Toronto Transit Commission (TTC) operates one of the most heavily used public transit networks in North America, delivering hundreds of millions of passenger trips annually across its subway, streetcar, and bus systems. Maintaining schedule reliability, operational efficiency, and rider satisfaction requires continuous monitoring of service disruptions, mechanical incidents, and peak-hour network bottlenecks.
 
-This project analyzes historical TTC subway operational and delay data (focusing on 2025 data) to identify core service patterns, evaluate transit reliability across routes, and diagnose key drivers of delays. Using Python (`pandas`) for data cleaning and exploratory data analysis (EDA), data wrangling operations were performed to standardise incident logs and evaluate incident frequencies and severity.
+This project analyzes historical TTC subway operational and delay data spanning **January 2022 to June 2026 (4.5 years)** to identify core service patterns, evaluate transit reliability across routes, and diagnose long-term drivers of service disruptions. Using Python (`pandas`) for data cleaning and exploratory data analysis (EDA), data wrangling operations were performed to standardize multi-year incident logs and evaluate seasonal, station-level, and year-over-year delay trends.
 
 **Key Focus Areas & Analytical Scope:**
-- **Delay Frequency & Severity:** Total number of delays by line, station, and temporal periods (months, time-of-day).
-- **Station Hotspots:** Top stations experiencing the highest delay volume and total delay duration.
-- **Temporal Patterns:** Seasonal and month-over-month incident trends and severity distributions.
-- **Data Quality & Wrangling:** Handling missing directional/line metadata and non-delay incident logs.
+- **Multi-Year Delay Trends & Volume Growth:** Year-over-year (YoY) incident counts and cumulative operational delay hours from 2022 to mid-2026.
+- **Station Bottlenecks & Hotspots:** Multi-year ranking of top stations by incident frequency and total delay minutes.
+- **Seasonal & Environmental Patterns:** Seasonal distribution (Winter, Spring, Summer, Fall) and monthly severity variations across multiple years.
+- **Root Cause & Vehicle Reliability:** Code category breakdown (track intrusions, disorderly patrons, signal failures) and vehicle-level incident analysis.
 
 ---
 
 # Data Structure & Initial Checks
 
-The raw dataset comprises **40,656 total records** across 11 core attributes, merged with a secondary lookup table containing official TTC delay code descriptions:
+The cleaned dataset (`TTC_Subway_Delay_Cleaned_2022_June2026.csv`) comprises **106,930 total records** across 22 engineered attributes:
 
-- **Primary Dataset Columns:** `Date`, `Time`, `Day`, `Station`, `Code`, `Min Delay`, `Min Gap`, `Bound`, `Line`, `Vehicle`.
-- **Lookup Dataset (`Code Descriptions.csv`):** Mapped `Code` to `DESCRIPTION` via a left join to provide readable incident descriptions.
-- **Data Cleaning & Engineering:**
-  - Standardized date formatting with `pd.to_datetime()` and derived temporal features (`Year`, `Month`, `Month_Name`, `Hour`).
-  - Evaluated missing values in `Line` and `Bound` columns.
-  - Isolated non-zero delays (`Min Delay != 0`) to separate actual operational disruptions from general reporting logs.
+- **Core Attributes:** `Date`, `Time`, `Day`, `Station`, `Code`, `Code_Description`, `Code_Category`, `Min Delay`, `Min Gap`, `Bound`, `Line`, `Vehicle`, `Year`, `Month`, `Month_Name`, `Season`, `Hour`, `Peak_Hour`, `DayName`, `Weekend`.
+- **Data Cleaning & Wrangling:**
+  - Standardized date & time parsing with engineered temporal features (`Year`, `Month`, `Season`, `Hour`, `Peak_Hour`).
+  - Isolated **39,898 non-zero delay incidents** (`Min Delay != 0`) to separate active operational disruptions from non-impact reporting logs.
+  - Category mapping for TTC delay codes into high-level cause categories (`Code_Category`).
 
 ---
 
@@ -30,50 +29,54 @@ The raw dataset comprises **40,656 total records** across 11 core attributes, me
 
 ### Overview of Findings
 
-Analysis of the 2025 TTC Subway delay dataset reveals **25,737 total delay incidents**, with an overall average delay duration of **7.78 minutes per incident** (excluding zero-delay events). 
+Across the **4.5-year evaluation period (2022 – June 2026)**, the TTC subway system experienced **39,898 active delay incidents**, resulting in **5,253.1 cumulative delay hours** (~218 days of downtime) with an overall mean delay severity of **7.90 minutes per incident**.
 
-1. **Volume vs. Duration Disconnect:** High incident volume does not directly correlate with long delay durations. While summer months (August with 2,719 incidents) experience peak incident counts, winter months (February with 2,274 incidents) suffer from significantly higher operational severity, averaging **9.56 minutes per delay**.
-2. **Station Bottlenecks:** Major transfer hubs—specifically **Bloor Station (915 incidents)** and **Kennedy Station (866 incidents)**—lead in incident frequency, whereas **Eglinton Station** suffers the highest cumulative delay impact with **2,822 total delay minutes** (average 4.28 minutes/incident).
-3. **Outlier Impact:** Severe incident disruptions (>180 minutes delay) distort overall system averages, highlighting vulnerability to catastrophic mechanical or signal failures.
+1. **Upward Volume Trajectory:** Annual delay incident volumes increased steadily from **18,576 in 2022** to a peak of **26,167 in 2024** (+40.9% overall growth). First-half 2026 data (14,745 incidents) indicates a continuing upward trajectory, pacing toward ~29,500 annualized incidents.
+2. **Volume vs. Duration Hub Disconnect:** Major terminal and transfer stations lead in incident frequency (**Bloor Station** with 4,246 incidents and **Finch Station** with 4,210 incidents). However, **Eglinton Station** represents the single highest cumulative downtime burden, accumulating **10,432 total delay minutes** (average 3.49 mins/incident).
+3. **Seasonal Severity Dynamics:** Winter months consistently exhibit elevated delay severity due to cold-weather track and vehicle strain, whereas summer months see high volume driven by passenger movement and outdoor track maintenance.
 
 ---
 
 # Insights Deep Dive
 
-### Category 1: Station Hotspots & Disruption Impact
-* **Incident Volume Leaders:** **Bloor Station** (915 incidents, avg 1.85 min) and **Kennedy Station** (866 incidents, avg 2.14 min) record the highest frequency of delay logs, primarily driven by high passenger volumes and transfer bottlenecks.
-* **Duration Severity Leader:** **Eglinton Station** accumulated **2,822 total delay minutes** across 660 incidents, with a substantially higher average delay duration of **4.28 minutes**, indicating slower incident resolution at this location.
-* **Key Hub Hotspots:** Finch (791 count), Kipling (783 count), Wilson (620 count), and Warden (544 count) round out the top station disruption points.
+### Category 1: Multi-Year Station Hotspots & Duration Impact
+* **Incident Frequency Leaders:** **Bloor Station** (4,246 count, avg 1.93 min) and **Finch Station** (4,210 count, avg 2.20 min) recorded the highest overall disruption frequencies across the 4.5-year dataset.
+* **Total Downtime Leader:** **Eglinton Station** accumulated **10,432 total delay minutes** across 2,986 incidents—exceeding Bloor Station's total delay time by over 2,200 minutes despite logging 1,260 fewer incidents.
+* **Key Network Bottlenecks:** **Kennedy Station** (3,659 count, 8,807 mins) and **Kipling Station** (3,434 count, 8,849 mins) round out the top multi-year terminal hubs requiring operational focus.
 
-### Category 2: Seasonal & Monthly Dynamics
-* **Peak Volume Months:** **August** (2,719 delays), **February** (2,274 delays), and **December** (2,242 delays) logged the highest total delay counts in 2025.
-* **Peak Severity Month:** **February** recorded the highest mean delay severity (**9.56 minutes**), likely influenced by severe winter weather conditions and cold-weather mechanical strain.
-* **Lowest Impact Periods:** September logged both the lowest volume (1,813 delays) and lowest average delay duration (6.83 minutes).
+### Category 2: Year-over-Year & Seasonal Dynamics
+* **Annual Incident Volume Breakdown:**
+  * **2022:** 18,576 records
+  * **2023:** 22,012 records *(+18.5% YoY)*
+  * **2024:** 26,167 records *(Peak volume year, +18.9% YoY)*
+  * **2025:** 25,430 records
+  * **2026 (Jan–June):** 14,745 records
+* **Seasonal Volume Distribution:** Winter and Fall quarters consistently experience higher incident counts (e.g., 2022 Winter logged 4,844 delays vs. Summer's 4,417), while Summer months often experience higher average delay durations (e.g., August 2022 averaged 8.56 mins/delay).
 
-### Category 3: Cause Code Analysis & Zero-Delay Reporting
-* **Code Descriptions:** Merging standardized code lookup descriptions highlighted distinct failure categories ranging from speed control and signal anomalies to passenger/medical emergencies.
-* **Zero-Delay Logging:** A subset of records log `Min Delay = 0`. Evaluating zero-delay instances by `Line` and `Code` reveals operational reporting entries that record minor incidents without impacting schedule timelines.
+### Category 3: Incident Root Causes & Code Breakdown
+* **Top Cause Categories:** Grouping by `Code_Category` reveals that signal anomalies, track intrusions (`SUUT`), and disorderly patron incidents (`SUDP`) account for recurring delays at key interchange stations.
+* **Zero-Delay Record Analysis:** Analyzing records with `Min Delay = 0` (over 67,000 logs) isolates administrative/reporting check-ins from genuine schedule disruptions.
 
-### Category 4: Vehicle & Outlier Performance
-* **Vehicle Reliability:** Aggregating delays by `Vehicle` (filtering for vehicles with >60 incidents) isolates repeating vehicle-level mechanical issues.
-* **Extreme Outliers:** Incidents exceeding **180 minutes (3 hours)** contribute disproportionately to total line downtime and require dedicated emergency response protocols.
+### Category 4: Vehicle Reliability & Outlier Analysis
+* **Vehicle Fleet Tracking:** Filtering for high-frequency vehicles (`size > 60`) identified specific vehicle units repeatedly associated with mechanical delay codes.
+* **Extreme Delay Outliers:** Incidents exceeding **180 minutes (3 hours)** contribute disproportionately to annual line downtime, requiring targeted incident response protocols.
 
 ---
 
 # Recommendations
 
-* **Targeted Station Maintenance at Eglinton:** Investigate root causes for Eglinton Station’s elevated average delay duration (4.28 mins vs ~1.8 mins at Bloor) to streamline incident resolution times.
-* **Winter Weather Preparedness:** Implement pre-winter mechanical checks ahead of February to mitigate the spike in delay severity (9.56 min avg).
-* **High-Volume Hub Crowd Control:** Deploy specialized platform management at Bloor and Kennedy stations during peak hours to reduce passenger-induced delay triggers.
-* **Outlier Incident Protocols:** Develop rapid response mechanisms specifically for high-impact (>180 min) signal and equipment failures.
+* **Eglinton Incident Response Optimization:** Address systemic bottlenecks at Eglinton Station to reduce its 3.49-minute average delay time down toward system averages (1.9–2.2 mins).
+* **Preventative Winter Maintenance:** Pre-deploy maintenance teams ahead of Q1 (January/February) to mitigate winter severity spikes.
+* **Capacity Management at Terminal Hubs:** Implement improved passenger flow control at Bloor, Finch, and Kennedy stations to minimize boarding-related delay triggers.
+* **Targeted Fleet Overhauls:** Use vehicle-level delay aggregations to schedule preventative maintenance for outlier vehicles causing recurring line disruptions.
 
 ---
 
 # Assumptions and Caveats
 
-* **Zero-Delay Exclusions:** Operational average delay calculations excluded `Min Delay == 0` rows to measure active disruption severity accurately.
-* **Missing Line Metadata:** Missing `Line` or `Bound` records were preserved for volume analysis but excluded from line-specific aggregations.
-* **Data Timeframe:** Analysis focuses on 2025 data slice extracted from the TTC Subway Delay dataset.
+* **Zero-Delay Exclusions:** Operational average delay duration calculations exclude `Min Delay == 0` records to reflect active disruption severity accurately.
+* **Partial Year Data:** 2026 data covers January through June 2026 (6 months).
+* **Missing Line/Bound Information:** A minority of incident logs lacked valid line or directional metadata and were excluded from line-specific breakdowns.
 
 ---
 **Data Source:** [TTC Subway Delay Data - Open Data Toronto](https://open.toronto.ca/dataset/ttc-subway-delay-data/)
