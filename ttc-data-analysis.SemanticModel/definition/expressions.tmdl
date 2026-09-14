@@ -5,3 +5,409 @@ expression ProjectFolder = "C:\Users\Mohit\Documents\ttc-data-analysis\" meta [I
 
 	annotation PBI_ResultType = Text
 
+expression fnImportFile =
+		(fileName as text) as table =>
+		let
+		    FullPath = ProjectFolder & "assets\" & fileName,
+		    Extension = Text.Lower(
+		        Text.AfterDelimiter(
+		            fileName,
+		            ".",
+		            {0, RelativePosition.FromEnd}
+		        )
+		    ),
+		
+		    Source =
+		        if Extension = "csv" then
+		            Table.PromoteHeaders(
+		                Csv.Document(
+		                    File.Contents(FullPath),
+		                    [
+		                        Delimiter = ",",
+		                        Encoding = 65001,
+		                        QuoteStyle = QuoteStyle.Csv
+		                    ]
+		                ),
+		                [PromoteAllScalars = true]
+		            )
+		
+		        else if Extension = "xlsx" then
+		            Table.PromoteHeaders(
+		                Excel.Workbook(
+		                    File.Contents(FullPath),
+		                    null,
+		                    true
+		                ){0}[Data],
+		                [PromoteAllScalars = true]
+		            )
+		
+		        else
+		            error "Unsupported file type. Only .csv and .xlsx are supported."
+		in
+		    Source
+	lineageTag: 2f4c442b-aba0-4c87-abfd-a599dfcd3bcf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression 'April ''21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"April '21_Sheet" = Source{[Item="April '21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"April '21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 79399ae5-8a29-4919-89d5-c5129777b75f
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'August 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"August 21_Sheet" = Source{[Item="August 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"August 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 5ab2128a-63e5-4341-9035-82ed11315335
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression December21 =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    December21_Sheet = Source{[Item="December21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(December21_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: d91126f0-412a-4211-babe-853ddee3bd36
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Feb 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"Feb 21_Sheet" = Source{[Item="Feb 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Feb 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: e7da10f1-14e8-4756-a4cd-06da81548409
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression January21 =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    January21_Sheet = Source{[Item="January21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(January21_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 208e59cc-22ea-4a96-b700-6e56afafd763
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'July 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"July 21_Sheet" = Source{[Item="July 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"July 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: e20fc182-cb3f-4395-a995-9703f4918ea2
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'June 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"June 21_Sheet" = Source{[Item="June 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"June 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: ca079fdb-efa6-4b64-88e2-cbb2f19a39f1
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'March ''21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"March '21_Sheet" = Source{[Item="March '21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"March '21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 1f1bb3ba-8802-45ed-bf3b-31dbab1dc405
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'May ''21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"May '21_Sheet" = Source{[Item="May '21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"May '21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: d2e47947-c657-4e18-9ba9-38b36ab957ab
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Nov 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"Nov 21_Sheet" = Source{[Item="Nov 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Nov 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 03306234-e3c3-4fa0-8219-91eccdf82288
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Oct 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"Oct 21_Sheet" = Source{[Item="Oct 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Oct 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 6eaac232-97cd-483b-b715-d22b822a0add
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Sept 21' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2021.xlsx"), null, true),
+		    #"Sept 21_Sheet" = Source{[Item="Sept 21",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sept 21_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 1a235a36-afb0-4020-b08c-e83d25aae985
+	queryGroup: 2021_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'April ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"April '20_Sheet" = Source{[Item="April '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"April '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 9bcf1e05-8516-49c5-9b45-7a8421e0ad43
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'August ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"August '20_Sheet" = Source{[Item="August '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"August '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: e54c7a17-5e7c-4a26-83ba-32152805eada
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Dec 2020' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Dec 2020_Sheet" = Source{[Item="Dec 2020",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Dec 2020_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 4a1f74c6-485e-42bf-aaab-87e6714e4205
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Feb 20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Feb 20_Sheet" = Source{[Item="Feb 20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Feb 20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 37c83dd9-7636-4661-82b6-b0cf01fd497d
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Jan 2020' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Jan 2020_Sheet" = Source{[Item="Jan 2020",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Jan 2020_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 8b899d0c-5e75-4c67-b839-b848d8154871
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'July ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"July '20_Sheet" = Source{[Item="July '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"July '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: f40fefb4-1c8e-47af-8feb-cec0318e1e30
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression June20 =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    June20_Sheet = Source{[Item="June20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(June20_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: e0ee10a1-ab35-4a85-ad86-708172d78634
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'March ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"March '20_Sheet" = Source{[Item="March '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"March '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 482e3d08-4a3e-4ca7-8635-e3260d3716c2
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'May ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"May '20_Sheet" = Source{[Item="May '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"May '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 4d15376b-aaa7-48d4-b1ba-d1e65e5ff8c3
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Nov ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Nov '20_Sheet" = Source{[Item="Nov '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Nov '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 19a31b95-839c-4201-ac4d-2d3663e64781
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Oct ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Oct '20_Sheet" = Source{[Item="Oct '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Oct '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: d928d27a-bea2-42ba-9bff-96206d340b96
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Sept ''20' =
+		let
+		    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2020.xlsx"), null, true),
+		    #"Sept '20_Sheet" = Source{[Item="Sept '20",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sept '20_Sheet", [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type text}, {"Line", type text}, {"Vehicle", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 9eb603d6-7c88-4186-abae-80918a7cd859
+	queryGroup: 2020_months
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

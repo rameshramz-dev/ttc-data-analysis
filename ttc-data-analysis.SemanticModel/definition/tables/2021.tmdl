@@ -1,0 +1,122 @@
+table 2021
+	lineageTag: 2edbb031-2fa9-4536-8ba1-bdf99e8f226f
+
+	column Incident_id
+		dataType: string
+		lineageTag: b6429763-61f2-4bdd-ba12-6ffaaa737576
+		summarizeBy: none
+		sourceColumn: Incident_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c9c36bbe-1757-4d4c-8291-ae923f501c8f
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: f207d645-3b03-4bba-8703-f11f5f975c51
+			defaultHierarchy: LocalDateTable_fba0a4a4-2d80-4ae7-b86d-f37dfaa6d185.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Time
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 9c23afde-142b-41e3-87d0-c948a76379b1
+		summarizeBy: none
+		sourceColumn: Time
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Day
+		dataType: string
+		lineageTag: 4da91642-643a-4066-a9d1-bf9e13a9cf02
+		summarizeBy: none
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column Station
+		dataType: string
+		lineageTag: b8e1b483-8b96-4b7f-aeda-680a2d5d0c1f
+		summarizeBy: none
+		sourceColumn: Station
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: string
+		lineageTag: 53298587-4ff3-4f84-857b-a613269962b0
+		summarizeBy: none
+		sourceColumn: Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Delay'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8734fd0b-7344-48f8-80a4-753075a4b1f2
+		summarizeBy: sum
+		sourceColumn: Min Delay
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Gap'
+		dataType: int64
+		formatString: 0
+		lineageTag: 855258ca-6e0d-4ee8-b538-fa730bb53c50
+		summarizeBy: sum
+		sourceColumn: Min Gap
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bound
+		dataType: string
+		lineageTag: e9eed4b1-a6e7-4817-88ef-e47e3e31cb03
+		summarizeBy: none
+		sourceColumn: Bound
+
+		annotation SummarizationSetBy = Automatic
+
+	column Line
+		dataType: string
+		lineageTag: 886a0fcc-a72d-406d-ab0d-7610d1e50d25
+		summarizeBy: none
+		sourceColumn: Line
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vehicle
+		dataType: int64
+		formatString: 0
+		lineageTag: a600be62-93ac-4a90-b4c2-7408f45f37cb
+		summarizeBy: sum
+		sourceColumn: Vehicle
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 2021 = m
+		mode: import
+		source =
+				let
+				    Source = Table.Combine({January21, #"Feb 21", #"March '21", #"April '21", #"May '21", #"June 21", #"July 21", #"August 21", #"Sept 21", #"Oct 21", #"Nov 21", December21}),
+				    #"Sorted Rows" = Table.Sort(Source,{{"Date", Order.Ascending}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Sorted Rows", "Index", 1, 1, Int64.Type),
+				    #"Added Custom" = Table.AddColumn(#"Added Index", "Incident_id", each "2021-" & Text.From([Index])),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom",{"Index"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Removed Columns",{"Incident_id", "Date", "Time", "Day", "Station", "Code", "Min Delay", "Min Gap", "Bound", "Line", "Vehicle"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

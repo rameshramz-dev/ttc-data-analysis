@@ -1,0 +1,118 @@
+table 'Delays impacting service'
+	lineageTag: 4985f034-57bb-49d6-907f-0885c0212177
+
+	column Incident_id
+		dataType: string
+		lineageTag: 8cf9e3b3-7e30-4747-af83-939d274ba27b
+		summarizeBy: none
+		sourceColumn: Incident_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cc627f3e-ba52-41a4-8584-f013dbbf5215
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: d776378d-112f-4b5a-a4b8-443a3d84f8ef
+			defaultHierarchy: LocalDateTable_532b93f9-00de-457c-8ed5-521e4eb82583.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Time
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 82d1c2a6-ba04-4190-a114-494a3a2d7429
+		summarizeBy: none
+		sourceColumn: Time
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Day
+		dataType: string
+		lineageTag: 60dbb5dd-551e-4704-a266-d0e252c7bca9
+		summarizeBy: none
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column Station
+		dataType: string
+		lineageTag: 044deccd-9e0c-4210-8cf7-0b20507d39e7
+		summarizeBy: none
+		sourceColumn: Station
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: string
+		lineageTag: de9a08b1-faea-4e89-9508-246d191a50bb
+		summarizeBy: none
+		sourceColumn: Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Delay'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f21c9e3-63cf-4302-a5ca-5bc3e6a1e0ea
+		summarizeBy: sum
+		sourceColumn: Min Delay
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Gap'
+		dataType: int64
+		formatString: 0
+		lineageTag: bb91dcae-533f-47af-99ca-b09592b97761
+		summarizeBy: sum
+		sourceColumn: Min Gap
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bound
+		dataType: string
+		lineageTag: b79146ef-3292-4ad5-9bb9-c1194ac01a74
+		summarizeBy: none
+		sourceColumn: Bound
+
+		annotation SummarizationSetBy = Automatic
+
+	column Line
+		dataType: string
+		lineageTag: aaac6c30-fc46-4077-a4e1-631cbae65acb
+		summarizeBy: none
+		sourceColumn: Line
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vehicle
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e6a646c-ebf0-4399-9e43-2de1067e437c
+		summarizeBy: sum
+		sourceColumn: Vehicle
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Delays impacting service' = m
+		mode: import
+		source =
+				let
+				    Source = #"Main Table",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Min Delay] <> 0))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

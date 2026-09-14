@@ -10,11 +10,11 @@ table 'Code Descriptions'
 
 		annotation SummarizationSetBy = Automatic
 
-	column CODE
+	column Code
 		dataType: string
 		lineageTag: cbfe9802-b1c7-4f93-b39e-32291d16b27f
 		summarizeBy: none
-		sourceColumn: CODE
+		sourceColumn: Code
 
 		annotation SummarizationSetBy = Automatic
 
@@ -32,9 +32,12 @@ table 'Code Descriptions'
 				let
 				    Source = Csv.Document(File.Contents("C:\Users\Mohit\Documents\ttc-data-analysis\assets\Code Descriptions.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"_id", Int64.Type}, {"CODE", type text}, {"DESCRIPTION", type text}})
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"_id", Int64.Type}, {"CODE", type text}, {"DESCRIPTION", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"CODE", "Code"}})
 				in
-				    #"Changed Type"
+				    #"Renamed Columns"
 
 	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
 

@@ -4,14 +4,79 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 0,
+        "x": 3119,
         "y": 0
       },
       "nodes": [
         {
           "location": {
-            "x": 284,
-            "y": 74
+            "x": 5396,
+            "y": 0
+          },
+          "nodeIndex": "2019",
+          "nodeLineageTag": "38bb45f2-98af-4bbf-8aeb-4233ce9daa29",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5112,
+            "y": 0
+          },
+          "nodeIndex": "2020",
+          "nodeLineageTag": "9a6e903d-5a39-4828-8470-f4084f7c982d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "2021",
+          "nodeLineageTag": "2edbb031-2fa9-4536-8ba1-bdf99e8f226f",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4828,
+            "y": 0
+          },
+          "nodeIndex": "2022",
+          "nodeLineageTag": "67234c15-d0db-4da4-a1ba-718e76990eae",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4544,
+            "y": 0
+          },
+          "nodeIndex": "2023",
+          "nodeLineageTag": "8afc8963-86b4-40e2-ae31-e6ac09457686",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3323,
+            "y": 72
           },
           "nodeIndex": "Code Descriptions",
           "nodeLineageTag": "e16d4256-5c59-4c4d-8f88-defa5d760378",
@@ -23,10 +88,11 @@
         },
         {
           "location": {
-            "x": 0,
+            "x": 4260,
             "y": 0
           },
-          "nodeIndex": "Delay Data after 2025",
+          "nodeIndex": "Delay Data 2024",
+          "nodeLineageTag": "0a534021-bae3-421a-bda4-de66cc85fbf7",
           "size": {
             "height": 300,
             "width": 234
@@ -35,11 +101,23 @@
         },
         {
           "location": {
-            "x": 568,
+            "x": 3692,
             "y": 0
           },
-          "nodeIndex": "Delay Data 2024",
-          "nodeLineageTag": "0a534021-bae3-421a-bda4-de66cc85fbf7",
+          "nodeIndex": "Main Table",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5680,
+            "y": 0
+          },
+          "nodeIndex": "Delays impacting service",
+          "nodeLineageTag": "4985f034-57bb-49d6-907f-0885c0212177",
           "size": {
             "height": 300,
             "width": 234

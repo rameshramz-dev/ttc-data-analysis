@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "d8a0a785340b03320426",
+  "position": {
+    "x": 1007.3695420660276,
+    "y": 184.02555910543131,
+    "z": 6000,
+    "height": 124.0468583599574,
+    "width": 272.63045793397231,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Main Table"
+                    }
+                  },
+                  "Property": "Incident Type"
+                }
+              },
+              "queryRef": "Main Table.Incident Type",
+              "nativeQueryRef": "Incident Type",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "selection": [
+        {
+          "properties": {
+            "selectAllCheckboxEnabled": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "aeedb31e09cde0b1acd0",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Main Table"
+              }
+            },
+            "Property": "Incident Type"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

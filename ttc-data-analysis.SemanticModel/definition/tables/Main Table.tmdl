@@ -1,5 +1,23 @@
-table 'Delay Data after 2025'
+table 'Main Table'
 	lineageTag: 1a2a5e91-09c2-4f7b-9a9a-102da7ff01d6
+
+	measure 'Most Common Delay Description' =
+			
+			VAR TopCodeTable =
+			    TOPN(
+			        1,
+			        VALUES('Main Table'[Code]),
+			        CALCULATE(COUNTROWS('Main Table')),
+			        DESC
+			    )
+			VAR TopCodeVal =
+			    MAXX(TopCodeTable, 'Main Table'[Code])
+			RETURN
+			    CALCULATE(
+			        SELECTEDVALUE('Code Descriptions'[DESCRIPTION], "No Description Found"),
+			        'Code Descriptions'[Code] = TopCodeVal
+			    )
+		lineageTag: 77e89b19-6183-49a4-b4a5-9fe38031cbcc
 
 	column Date
 		dataType: dateTime
@@ -103,7 +121,19 @@ table 'Delay Data after 2025'
 
 		annotation SummarizationSetBy = Automatic
 
-	partition 'Delay Data after 2025' = m
+	column 'Incident Type' =
+			
+			IF(
+			    'Main Table'[Min Delay] = 0 && 'Main Table'[Min Gap] = 0,
+			    "Zero Delay & Gap",
+			    "Service Impacted"
+			)
+		lineageTag: dce55070-a5bc-490a-b3e3-784de5df41b2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Main Table' = m
 		mode: import
 		source =
 				let
@@ -117,9 +147,11 @@ table 'Delay Data after 2025'
 				    #"Reordered Columns1" = Table.ReorderColumns(#"Added Custom1",{"_id", "Incident_id", "Year", "Date", "Time", "Day", "Station", "Code", "Min Delay", "Min Gap", "Bound", "Line", "Vehicle"}),
 				    #"Removed Columns" = Table.RemoveColumns(#"Reordered Columns1",{"Year", "_id"}),
 				    #"Appended Query" = Table.Combine({#"Removed Columns", #"Delay Data 2024"}),
-				    #"Sorted Rows" = Table.Sort(#"Appended Query",{{"Date", Order.Ascending}, {"Time", Order.Ascending}})
+				    #"Sorted Rows" = Table.Sort(#"Appended Query",{{"Date", Order.Ascending}, {"Time", Order.Ascending}}),
+				    #"Appended Query1" = Table.Combine({#"Sorted Rows", #"2023", #"2022", #"2021", #"2020"}),
+				    #"Appended Query2" = Table.Combine({#"Appended Query1", #"2019"})
 				in
-				    #"Sorted Rows"
+				    #"Appended Query2"
 
 	annotation PBI_NavigationStepName = Navigation
 

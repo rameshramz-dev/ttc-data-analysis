@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "a28223b0ddc62bc4ae10",
+  "position": {
+    "x": 129.76958525345623,
+    "y": 49.548387096774192,
+    "z": 6002,
+    "height": 69.6036866359447,
+    "width": 127.41013824884793,
+    "tabOrder": 6002
+  },
+  "visual": {
+    "visualType": "image",
+    "objects": {
+      "image": [
+        {
+          "properties": {
+            "sourceType": {
+              "expr": {
+                "Literal": {
+                  "Value": "'imageUrl'"
+                }
+              }
+            },
+            "sourceUrl": {
+              "expr": {
+                "Literal": {
+                  "Value": "'https://images.seeklogo.com/logo-png/44/1/toronto-transit-commission-ttc-logo-png_seeklogo-445808.png'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

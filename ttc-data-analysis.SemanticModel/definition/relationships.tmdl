@@ -1,11 +1,11 @@
 relationship 0c3a1d3b-1ba1-4de7-be14-7a89a5173618
 	joinOnDateBehavior: datePartOnly
-	fromColumn: 'Delay Data after 2025'.Date
+	fromColumn: 'Main Table'.Date
 	toColumn: LocalDateTable_cebcff8b-c479-4c6d-9b2e-e9cb42713e81.Date
 
 relationship fd95a932-bd10-8d9b-2fac-d4123a66caee
-	fromColumn: 'Delay Data after 2025'.Code
-	toColumn: 'Code Descriptions'.CODE
+	fromColumn: 'Main Table'.Code
+	toColumn: 'Code Descriptions'.Code
 
 relationship 6c3e33a1-ebf9-470d-af1b-be8964a51cb8
 	joinOnDateBehavior: datePartOnly
@@ -14,5 +14,35 @@ relationship 6c3e33a1-ebf9-470d-af1b-be8964a51cb8
 
 relationship 9bde4814-86f6-4626-314d-670152db6624
 	fromColumn: 'Delay Data 2024'.Code
-	toColumn: 'Code Descriptions'.CODE
+	toColumn: 'Code Descriptions'.Code
+
+relationship 371b610f-8ffd-46c2-85c9-38689d6897ba
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 2023.Date
+	toColumn: LocalDateTable_fac32359-89b4-49e3-ac8c-aa60b137c26b.Date
+
+relationship e4715b88-6bbd-4cf5-951e-9c805fbdaecf
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 2022.Date
+	toColumn: LocalDateTable_876d8be8-18cc-49bc-829c-96211761e15c.Date
+
+relationship f207d645-3b03-4bba-8703-f11f5f975c51
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 2021.Date
+	toColumn: LocalDateTable_fba0a4a4-2d80-4ae7-b86d-f37dfaa6d185.Date
+
+relationship 6fa1b7dd-809c-440c-862d-90a173ffab58
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 2020.Date
+	toColumn: LocalDateTable_cb0a0077-423b-454e-90bd-990a7cc017d8.Date
+
+relationship eeb1a4cf-a5f9-490f-a4a3-2f59ad39edfa
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 2019.Date
+	toColumn: LocalDateTable_4caa76c7-2c9b-4f61-9bca-447f998fc0f1.Date
+
+relationship d776378d-112f-4b5a-a4b8-443a3d84f8ef
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Delays impacting service'.Date
+	toColumn: LocalDateTable_532b93f9-00de-457c-8ed5-521e4eb82583.Date
 

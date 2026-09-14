@@ -1,0 +1,124 @@
+table 2019
+	lineageTag: 38bb45f2-98af-4bbf-8aeb-4233ce9daa29
+
+	column Incident_id
+		dataType: string
+		lineageTag: 9f96cf68-4063-47de-a4c9-96b98fd78de7
+		summarizeBy: none
+		sourceColumn: Incident_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d7eaea34-8dd4-41e0-a176-c5a27b84fdc1
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: eeb1a4cf-a5f9-490f-a4a3-2f59ad39edfa
+			defaultHierarchy: LocalDateTable_4caa76c7-2c9b-4f61-9bca-447f998fc0f1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Time
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 75e79c50-2b22-4ee0-953b-bcf59271438a
+		summarizeBy: none
+		sourceColumn: Time
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column Day
+		dataType: string
+		lineageTag: 4c6a5584-e587-4c4a-abc4-e5102f7a5fbf
+		summarizeBy: none
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column Station
+		dataType: string
+		lineageTag: e8da4056-ffb9-460e-8545-69e0f54f7c8d
+		summarizeBy: none
+		sourceColumn: Station
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: string
+		lineageTag: 226cc136-5bed-43a8-8d0c-0e0822f3dbb0
+		summarizeBy: none
+		sourceColumn: Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Delay'
+		dataType: int64
+		formatString: 0
+		lineageTag: a6b2f8a5-7c59-450f-9a11-6029303a8e36
+		summarizeBy: sum
+		sourceColumn: Min Delay
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Gap'
+		dataType: int64
+		formatString: 0
+		lineageTag: 274b60fb-803c-4899-bd4d-a78a63fc12d9
+		summarizeBy: sum
+		sourceColumn: Min Gap
+
+		annotation SummarizationSetBy = Automatic
+
+	column Bound
+		dataType: string
+		lineageTag: 44cb94d9-f67c-4672-b888-815f7b7c7dd0
+		summarizeBy: none
+		sourceColumn: Bound
+
+		annotation SummarizationSetBy = Automatic
+
+	column Line
+		dataType: string
+		lineageTag: 5518395f-4d15-4b1e-8423-13ef7277a587
+		summarizeBy: none
+		sourceColumn: Line
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vehicle
+		dataType: int64
+		formatString: 0
+		lineageTag: e6736dcc-ff9f-4df1-b219-3517d22258bb
+		summarizeBy: sum
+		sourceColumn: Vehicle
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 2019 = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(ProjectFolder & "assets\ttc-subway-delay-data-2019 1.xlsx"), null, true),
+				    #"2019_Sheet" = Source{[Item="2019",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"2019_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"Time", type time}, {"Day", type text}, {"Station", type text}, {"Code", type text}, {"Min Delay", Int64.Type}, {"Min Gap", Int64.Type}, {"Bound", type any}, {"Line", type any}, {"Vehicle", Int64.Type}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Added Custom" = Table.AddColumn(#"Added Index", "Incident_id", each "2019-" & Text.From([Index])),
+				    #"Removed Columns" = Table.RemoveColumns(#"Added Custom",{"Index"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Removed Columns",{"Incident_id", "Date", "Time", "Day", "Station", "Code", "Min Delay", "Min Gap", "Bound", "Line", "Vehicle"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
