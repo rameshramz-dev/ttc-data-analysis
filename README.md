@@ -1,4 +1,4 @@
-# Welcome to the TTC Data Analysis README!
+# Welcome to the TTC Data Analysis!
 
 # Project Background
 The Toronto Transit Commission (TTC) operates one of the most heavily used public transit networks in North America, delivering hundreds of millions of passenger trips annually across its subway, streetcar, and bus systems. Maintaining schedule reliability, operational efficiency, and rider satisfaction requires continuous monitoring of service disruptions, mechanical incidents, and peak-hour network bottlenecks.
